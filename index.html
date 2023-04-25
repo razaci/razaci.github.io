@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html>
 <script>
+
+const searchBtn = document.querySelector("#search-btn");
+if (searchBtn) {
+  searchBtn.addEventListener("click", searchLoads);
+}
+
 // Get the search button and add a click event listener
 document.querySelector("#search-btn").addEventListener("click", searchLoads);
 
