@@ -1,94 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Truck Load Search</title>
-  <style>
-    body {
-      background-color: #000000;
-      color: #FFFFFF;
-      font-family: Arial, sans-serif;
-    }
+<html>
+<script>
+// Get the search button and add a click event listener
+document.querySelector("#search-btn").addEventListener("click", searchLoads);
 
-    h1, h2, h3 {
-      color: #FF0000;
-    }
+// Function to search loads
+function searchLoads() {
+  // Get the selected state
+  const state = document.querySelector("#state").value;
 
-    button {
-      background-color: #FF0000;
-      color: #FFFFFF;
-      border: none;
-      padding: 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+  // Get the minimum rate
+  const minRate = document.querySelector("#min-rate").value;
 
-    select {
-      background-color: #FF0000;
-      color: #FFFFFF;
-      padding: 5px;
-      border-radius: 5px;
-      border: none;
-      margin: 10px;
-    }
+  // Send a GET request to the server to search for loads with the selected state and minimum rate
+  fetch(`/search?state=${state}&min_rate=${minRate}`)
+    .then(response => response.json())
+    .then(data => {
+      // Display the results
+      const resultsContainer = document.querySelector("#results-container");
+      resultsContainer.innerHTML = "";
 
-    option {
-      background-color: #000000;
-      color: #FFFFFF;
-    }
+      if (data.length === 0) {
+        resultsContainer.innerHTML = "<p>No loads found.</p>";
+        return;
+      }
 
-    table {
-      border-collapse: collapse;
-      margin: 20px;
-    }
+      data.forEach(load => {
+        const loadElement = document.createElement("div");
+        loadElement.innerHTML = `
+          <h3>${load.origin} to ${load.destination}</h3>
+          <p>Rate: ${load.rate}</p>
+          <p>Route: ${load.route}</p>
+          <p>Details: ${load.details}</p>
+        `;
+        resultsContainer.appendChild(loadElement);
+      });
+    })
+    .catch(error => {
+      console.error(error);
+      alert("An error occurred while searching for loads.");
+    });
+}
 
-    th, td {
-      border: 1px solid #FF0000;
-      padding: 10px;
-      text-align: center;
-    }
-
-    th {
-      background-color: #FF0000;
-      color: #FFFFFF;
-    }
-  </style>
-</head>
-<body>
-  <h1>Truck Load Search</h1>
-  <form>
-    <label for="start_rate">Starting Rate:</label>
-    <input type="number" id="start_rate" name="start_rate" min="0" step="0.01"><br><br>
-    <label for="region">Region:</label>
-    <select id="region" name="region">
-      <option value="">--Select a region--</option>
-      <option value="north">North</option>
-      <option value="south">South</option>
-      <option value="east">East</option>
-      <option value="west">West</option>
-    </select><br><br>
-    <label for="state">State:</label>
-    <select id="state" name="state">
-      <option value="">--Select a state--</option>
-      <option value="alabama">Alabama</option>
-      <option value="alaska">Alaska</option>
-      <option value="arizona">Arizona</option>
-      <option value="arkansas">Arkansas</option>
-      <option value="california">California</option>
-      <option value="colorado">Colorado</option>
-      <option value="connecticut">Connecticut</option>
-      <option value="delaware">Delaware</option>
-      <option value="florida">Florida</option>
-      <option value="georgia">Georgia</option>
-      <option value="hawaii">Hawaii</option>
-      <option value="idaho">Idaho</option>
-      <option value="illinois">Illinois</option>
-      <option value="indiana">Indiana</option>
-      <option value="iowa">Iowa</option>
-      <option value="kansas">Kansas</option>
-      <option value="kentucky">Kentucky</option>
-      <option value="louisiana">Louisiana</option>
-      <option value="maine">Maine</option>
-      <option value="maryland">Maryland</option
-
+</script>
+  <head>
+    <title>Trucking Load Search</title>
+    <style>
+      body {
+        background-color: black;
+        color: red;
+        font-family: Arial, sans-serif;
+      }
+      
+      h1 {
+        text-align: center;
+      }
+      
+      label {
+        display: block;
+        margin-top: 10px;
+      }
+      
+      select, input[type="submit"] {
+        display: block;
+        margin: 10px auto;
+        padding: 5px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        background-color: red;
+        color: black;
+        cursor: pointer;
+      }
+      
+      input[type="submit"] {
+        background-color: black;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Trucking Load Search</h1>
+    <form action="#" method="get">
+      <label for="region">Region:</label>
+      <select id="region" name="region">
+        <option value="all">All regions</option>
+        <option value="northeast">Northeast</option>
+        <option value="midwest">Midwest</option>
+        <option value="south">South</option>
+        <option value="west">West</option>
+      </select>
+      <label for="state">State:</label>
+      <select id="state" name="state">
+        <option value="all">All states</option>
+        <option value="ny">New York</option>
+        <option value="ca">California</option>
+        <option value="tx">Texas</option>
+        <option value="fl">Florida</option>
+      </select>
+      <label for="rate">Minimum Rate:</label>
+      <input type="number" id="rate" name="rate" min="0" max="9999" step="0.01">
+      <input type="submit" value="Search">
+    </form>
+  </body>
+</html>
