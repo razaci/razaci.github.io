@@ -1,112 +1,49 @@
 <!DOCTYPE html>
 <html>
 <script>
+  const form = document.querySelector('form');
+  const promptInput = document.querySelector('#prompt');
+  const imageContainer = document.querySelector('#image-container');
 
-const searchBtn = document.querySelector("#search-btn");
-if (searchBtn) {
-  searchBtn.addEventListener("click", searchLoads);
-}
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const prompt = promptInput.value.trim();
+    generateImage(prompt);
+  });
 
-// Get the search button and add a click event listener
-document.querySelector("#search-btn").addEventListener("click", searchLoads);
+  function generateImage(prompt) {
+    // TODO: Generate the image and display it in the imageContainer
+  }
 
-// Function to search loads
-function searchLoads() {
-  // Get the selected state
-  const state = document.querySelector("#state").value;
+function generateImage(prompt) {
+  const query = encodeURIComponent(prompt);
+  const apiUrl = `https://api.unsplash.com/photos/random?query=${query}&client_id=-dMs1nQB_c1wNio46eFSGl8b5PxugSM0j7EbEj99_XI`;
 
-  // Get the minimum rate
-  const minRate = document.querySelector("#min-rate").value;
-
-  // Send a GET request to the server to search for loads with the selected state and minimum rate
-  fetch(`/search?state=${state}&min_rate=${minRate}`)
+  fetch(apiUrl)
     .then(response => response.json())
     .then(data => {
-      // Display the results
-      const resultsContainer = document.querySelector("#results-container");
-      resultsContainer.innerHTML = "";
-
-      if (data.length === 0) {
-        resultsContainer.innerHTML = "<p>No loads found.</p>";
-        return;
-      }
-
-      data.forEach(load => {
-        const loadElement = document.createElement("div");
-        loadElement.innerHTML = `
-          <h3>${load.origin} to ${load.destination}</h3>
-          <p>Rate: ${load.rate}</p>
-          <p>Route: ${load.route}</p>
-          <p>Details: ${load.details}</p>
-        `;
-        resultsContainer.appendChild(loadElement);
-      });
+      const imageUrl = data.urls.regular;
+      const image = new Image();
+      image.src = imageUrl;
+      imageContainer.appendChild(image);
     })
     .catch(error => {
       console.error(error);
-      alert("An error occurred while searching for loads.");
     });
 }
 
 </script>
+
   <head>
-    <title>Trucking Load Search</title>
-    <style>
-      body {
-        background-color: black;
-        color: red;
-        font-family: Arial, sans-serif;
-      }
-      
-      h1 {
-        text-align: center;
-      }
-      
-      label {
-        display: block;
-        margin-top: 10px;
-      }
-      
-      select, input[type="submit"] {
-        display: block;
-        margin: 10px auto;
-        padding: 5px;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        background-color: red;
-        color: black;
-        cursor: pointer;
-      }
-      
-      input[type="submit"] {
-        background-color: black;
-        color: red;
-      }
-    </style>
+    <title>Prompt Image Generator</title>
   </head>
   <body>
-    <h1>Trucking Load Search</h1>
-    <form action="#" method="get">
-      <label for="region">Region:</label>
-      <select id="region" name="region">
-        <option value="all">All regions</option>
-        <option value="northeast">Northeast</option>
-        <option value="midwest">Midwest</option>
-        <option value="south">South</option>
-        <option value="west">West</option>
-      </select>
-      <label for="state">State:</label>
-      <select id="state" name="state">
-        <option value="all">All states</option>
-        <option value="ny">New York</option>
-        <option value="ca">California</option>
-        <option value="tx">Texas</option>
-        <option value="fl">Florida</option>
-      </select>
-      <label for="rate">Minimum Rate:</label>
-      <input type="number" id="rate" name="rate" min="0" max="9999" step="0.01">
-      <input type="submit" value="Search">
+    <h1>Prompt Image Generator</h1>
+    <form>
+      <label for="prompt">Enter your prompt:</label>
+      <input type="text" id="prompt" name="prompt">
+      <button type="submit">Generate Image</button>
     </form>
+    <div id="image-container"></div>
   </body>
 </html>
