@@ -11,25 +11,36 @@
     generateImage(prompt);
   });
 
-  function generateImage(prompt) {
-    // TODO: Generate the image and display it in the imageContainer
+    function generateImage(prompt) {
+    const query = encodeURIComponent(prompt);
+    const apiUrl = `https://api.unsplash.com/photos/random?query=${query}&client_id=-dMs1nQB_c1wNio46eFSGl8b5PxugSM0j7EbEj99_XI`;
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        const imageUrl = data.urls.regular;
+        const image = new Image();
+        image.src = imageUrl;
+        imageContainer.appendChild(image);
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
-function generateImage(prompt) {
-  const query = encodeURIComponent(prompt);
-  const apiUrl = `https://api.unsplash.com/photos/random?query=${query}&client_id=-dMs1nQB_c1wNio46eFSGl8b5PxugSM0j7EbEj99_XI`;
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const promptInput = document.querySelector('#prompt');
+    const imageContainer = document.querySelector('#image-container');
 
-  fetch(apiUrl)
-    .then(response => response.json())
-    .then(data => {
-      const imageUrl = data.urls.regular;
-      const image = new Image();
-      image.src = imageUrl;
-      imageContainer.appendChild(image);
-    })
-    .catch(error => {
-      console.error(error);
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const prompt = promptInput.value.trim();
+      generateImage(prompt);
     });
+  });
+
+
 }
 
 </script>
