@@ -1,59 +1,104 @@
 <!DOCTYPE html>
 <html>
-<script>
-  const form = document.querySelector('form');
-  const promptInput = document.querySelector('#prompt');
-  const imageContainer = document.querySelector('#image-container');
+<head>
 
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    const prompt = promptInput.value.trim();
-    generateImage(prompt);
-  });
-
-    function generateImage(prompt) {
-    const query = encodeURIComponent(prompt);
-    const apiUrl = `https://api.unsplash.com/photos/random?query=${query}&client_id=-dMs1nQB_c1wNio46eFSGl8b5PxugSM0j7EbEj99_XI`;
-
-    fetch(apiUrl)
-      .then(response => response.json())
-      .then(data => {
-        const imageUrl = data.urls.regular;
-        const image = new Image();
-        image.src = imageUrl;
-        imageContainer.appendChild(image);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
-    const promptInput = document.querySelector('#prompt');
-    const imageContainer = document.querySelector('#image-container');
-
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      const prompt = promptInput.value.trim();
-      generateImage(prompt);
-    });
-  });
-
-
-
-</script>
-
-  <head>
-    <title>Prompt Image Generator</title>
-  </head>
-  <body>
-    <h1>Prompt Image Generator</h1>
-    <form>
-      <label for="prompt">Enter your prompt:</label>
-      <input type="text" id="prompt" name="prompt">
-      <button type="submit">Generate Image</button>
-    </form>
-    <div id="image-container"></div>
-  </body>
+	<title>WeHaul - Load Search</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="script.js"></script>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+		header {
+			background-color: #000;
+			color: #fff;
+			padding: 20px;
+		}
+		h1 {
+			margin: 0;
+		}
+		form {
+			padding: 20px;
+		}
+		label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		input[type=number] {
+			padding: 5px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			margin-bottom: 10px;
+			width: 100%;
+			box-sizing: border-box;
+		}
+		button {
+			padding: 10px;
+			border-radius: 5px;
+			border: none;
+			background-color: #000;
+			color: #fff;
+			cursor: pointer;
+		}
+		table {
+			border-collapse: collapse;
+			width: 100%;
+		}
+		th, td {
+			padding: 8px;
+			text-align: left;
+			border-bottom: 1px solid #ddd;
+		}
+		th {
+			background-color: #f2f2f2;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1>WeHaul - Load Search</h1>
+	</header>
+	<form id="loadSearchForm">
+		<label for="lowestLimit">Lowest Limit Value:</label>
+			<input type="number" id="lowestLimit" name="lowestLimit" placeholder="Enter the lowest limit value for the search">
+			<button type="submit">Search</button>
+	</form>
+	<table id="loadResultsTable">
+		<thead>
+			<tr>
+				<th>Company</th>
+				<th>Load Type</th>
+				<th>Region/State</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Loading Company A</td>
+				<td>Power Only Load</td>
+				<td>California</td>
+			</tr>
+			<tr>
+				<td>Loading Company B</td>
+				<td>Power Only Load</td>
+				<td>Texas</td>
+			</tr>
+			<tr>
+				<td>Loading Company C</td>
+				<td>Power Only Load</td>
+				<td>Florida</td>
+			</tr>
+		</tbody>
+	</table>
+	<script>
+		document.getElementById("loadSearchForm").addEventListener("submit", function(event) {
+			event.preventDefault();
+			const lowestLimit = document.getElementById("lowestLimit").value;
+			// Perform load search here using lowestLimit as the search parameter
+			// Populate table rows with search results
+		});
+	</script>
+</body>
 </html>
