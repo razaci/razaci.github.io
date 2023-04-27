@@ -93,12 +93,15 @@
 		</tbody>
 	</table>
 	<script>
+document.addEventListener('DOMContentLoaded', function() {
 		document.getElementById("loadSearchForm").addEventListener("submit", function(event) {
 			event.preventDefault();
 			const lowestLimit = document.getElementById("lowestLimit").value;
 			// Perform load search here using lowestLimit as the search parameter
 			// Populate table rows with search results
 		});
+	});
+
 	</script>
 </body>
 </html>
